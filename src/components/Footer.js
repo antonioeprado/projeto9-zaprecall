@@ -14,15 +14,6 @@ function Footer(props) {
 
   return (
     <FooterContainer>
-        <ButtonContainer>
-            {buttons.map((button, index) => (
-                <Button
-                    key={index}
-                    text={button.text}
-                    color={button.color}
-                />
-            ))}
-        </ButtonContainer>
         {`${num}/${numOfTotalQuestions} CONCLUÍDOS`}
     </FooterContainer>
   )
@@ -32,20 +23,14 @@ export default Footer
 
 const FooterContainer = styled.footer`
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 375px;
-    min-height: 70px;
-    gap: 20px;
+    height: 70px;
     padding: 14px 10px;
     font-size: 18px;
     text-align: center;
     color: black;
     background-color: white;
-`;
-
-const ButtonContainer = styled.div`
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: space-evenly;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 `;
