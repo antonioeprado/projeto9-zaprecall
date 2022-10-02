@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './Button';
 import styled from 'styled-components';
 import play from '../assets/images/play-outline-icon.svg';
@@ -19,6 +19,17 @@ function Flashcard(props) {
   const [playImg, setPlayImg] = useState(play);
   const [detail, setDetail] = useState(question);
   const [status, setStatus] = useState("");
+  const [cursor, setCursor] = useState("");
+
+  useEffect(() => {
+    if(status) {
+      setCursor("not-allowed");
+    } else if(open) {
+      setCursor("default");
+    } else {
+      setCursor("pointer");
+    }
+  }, [status, open])
 
 
   function openCard() {
@@ -30,15 +41,29 @@ function Flashcard(props) {
     setDetail(answer);
   }
 
+  function playButton() {
+    if(cursor !== "not-allowed") {
+      return playImg === play ? openCard() : showAnswer();
+    }
+  }
+
 
   return (
-    <FlashCardContainer open={open} detail={detail} answer={answer} status={status}>
+    <FlashCardContainer
+      open={open}
+      detail={detail}
+      answer={answer}
+      status={status}
+      cursor={cursor}
+    >
         {open ? detail : `Pergunta ${index + 1}`}
         <PlayButton
           src={playImg}
-          onClick={playImg === play ? openCard : showAnswer}
+          onClick={playButton}
           detail={detail}
           answer={answer}
+          cursor={cursor}
+          data-identifier="flashcard-show-btn"
         />
         <ButtonContainer detail={detail} answer={answer}>
             {buttons.map((button, index) => (
@@ -81,7 +106,7 @@ const FlashCardContainer = styled.div`
     text-decoration: ${(props) => props.status ? "line-through" : "none"};
     background-color: ${(props) => props.open ? "#FFFFD4": "white"};
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
-    cursor: ${(props) => props.open ? "default" : "pointer"};
+    cursor: ${(props) => props.cursor};
 `;
 
 const ButtonContainer = styled.div`
@@ -95,4 +120,5 @@ const PlayButton = styled.img`
     display: ${(props) => props.detail !== props.answer ? "initial" : "none"};
     width: 20px;
     height: 23px;
+    cursor: ${(props) => props.cursor};
 `;

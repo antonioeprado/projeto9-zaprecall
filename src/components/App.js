@@ -17,7 +17,16 @@ function App() {
       <GlobalStyle />
       <AppContainer>
         <Header />
-        {questions.map((question, index) => <Flashcard key={index} questions={question} index={index} num={num} setNum={setNum}/>)}
+        {questions.map((question, index) => (
+          <Flashcard
+            key={index}
+            questions={question}
+            index={index}
+            num={num}
+            setNum={setNum}
+            data-identifier="flashcard"
+          />
+        ))}
       </AppContainer>
       <Footer num={num} setNum={setNum} numOfTotalQuestions={questions.length}/>
     </>
