@@ -5,9 +5,9 @@ import play from '../assets/images/play-outline-icon.svg';
 import arrow from '../assets/images/setinha.png';
 
 const buttons = [
-  {text: "Não lembrei", color: "#FF3030"},
-  {text: "Quase não lembrei", color: "#FF922E"},
-  {text: "Zap!", color: "#2FBE34"}
+  {text: "Não lembrei", color: "#FF3030", dataId: "forgot-btn"},
+  {text: "Quase não lembrei", color: "#FF922E", dataId: "almost-forgot-btn"},
+  {text: "Zap!", color: "#2FBE34", dataId: "zap-btn"}
 ]
 
 function Flashcard(props) {
@@ -20,6 +20,8 @@ function Flashcard(props) {
   const [detail, setDetail] = useState(question);
   const [status, setStatus] = useState("");
   const [cursor, setCursor] = useState("");
+  const [dataIdParagraph, setDataIdParagraph] = useState("flashcard-index-item");
+  const [dataIdImg, setDataIdImg] = useState("flashcard-show-btn")
 
   useEffect(() => {
     if(status) {
@@ -31,6 +33,13 @@ function Flashcard(props) {
     }
   }, [status, open])
 
+  useEffect(() => {
+    identifyDataParagraph();
+  }, [open, detail])
+
+  useEffect(() => {
+    identifyDataImg();
+  }, [playImg])
 
   function openCard() {
     setOpen(true);
@@ -47,6 +56,30 @@ function Flashcard(props) {
     }
   }
 
+  function identifyDataParagraph() {
+    if(!open) {
+      setDataIdParagraph("flashcard-index-item");
+    } else if(open && detail === question) {
+      setDataIdParagraph("flashcard-question");
+    } else {
+      setDataIdParagraph("flashcard-answer");
+    }
+  }
+
+  function identifyDataImg() {
+    switch (playImg) {
+      case play:
+        setDataIdImg("flashcard-show-btn");
+        break;
+      case arrow:
+        setDataIdImg("flashcard-turn-btn");
+        break;
+      default:
+        setDataIdImg("flashcard-status");
+        break;
+    }
+  }
+
 
   return (
     <FlashCardContainer
@@ -55,16 +88,19 @@ function Flashcard(props) {
       answer={answer}
       status={status}
       cursor={cursor}
+      data-identifier="flashcard"
     >
+      <FlashParagraph open={open} status={status} data-identifier={dataIdParagraph}>
         {open ? detail : `Pergunta ${index + 1}`}
-        <PlayButton
-          src={playImg}
-          onClick={playButton}
-          detail={detail}
-          answer={answer}
-          cursor={cursor}
-          data-identifier="flashcard-show-btn"
-        />
+      </FlashParagraph>
+      <PlayButton
+        src={playImg}
+        onClick={playButton}
+        detail={detail}
+        answer={answer}
+        cursor={cursor}
+        data-identifier={dataIdImg}
+      />
         <ButtonContainer detail={detail} answer={answer}>
             {buttons.map((button, index) => (
                 <Button
@@ -78,6 +114,7 @@ function Flashcard(props) {
                     setStatus={setStatus}
                     num={num}
                     setNum={setNum}
+                    data-identifier={button.dataId}
                 />
             ))}
         </ButtonContainer>
@@ -97,6 +134,12 @@ const FlashCardContainer = styled.div`
     margin: 10px auto;
     padding: ${(props) => props.open ? "20px 10px" : "10px 10px"};
     border-radius: 5px;
+    background-color: ${(props) => props.open ? "#FFFFD4": "white"};
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
+    cursor: ${(props) => props.cursor};
+`;
+
+const FlashParagraph = styled.p`
     font-family: 'Recursive', sans-serif;
     font-style: "normal";
     font-weight: ${(props) => props.open ? 400 : 700};
@@ -104,9 +147,6 @@ const FlashCardContainer = styled.div`
     line-height: ${(props) => props.open ? "21.6px" : "19.2px"};
     color: ${(props) => props.status ? props.status : "black"};
     text-decoration: ${(props) => props.status ? "line-through" : "none"};
-    background-color: ${(props) => props.open ? "#FFFFD4": "white"};
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
-    cursor: ${(props) => props.cursor};
 `;
 
 const ButtonContainer = styled.div`

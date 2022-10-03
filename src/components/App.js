@@ -24,11 +24,10 @@ function App() {
             index={index}
             num={num}
             setNum={setNum}
-            data-identifier="flashcard"
           />
         ))}
       </AppContainer>
-      <Footer num={num} setNum={setNum} numOfTotalQuestions={questions.length}/>
+      <Footer num={num} setNum={setNum} numOfTotalQuestions={questions.length} />
     </>
   )
 }

@@ -1,19 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from './Button';
-
-const buttons = [
-    {text: "Não lembrei", color: "#FF3030"},
-    {text: "Quase não lembrei", color: "#FF922E"},
-    {text: "Zap!", color: "#2FBE34"}
-]
 
 function Footer(props) {
 
     const {num, numOfTotalQuestions} = props;
 
   return (
-    <FooterContainer>
+    <FooterContainer data-identifier="flashcard-counter">
         {`${num}/${numOfTotalQuestions} CONCLUÍDOS`}
     </FooterContainer>
   )
